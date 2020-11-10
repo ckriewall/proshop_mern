@@ -13,6 +13,7 @@ import {
   userUpdateProfileReducer,
 } from './reducers/userReducers'
 
+// Create a single reducer to define Redux Sore data
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
@@ -23,6 +24,8 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
 })
 
+// Get data from local storage to push into Redux initial state.
+// Redux State does not persist on refresh, but local storage does.
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? JSON.parse(localStorage.getItem('cartItems'))
   : []
@@ -31,8 +34,16 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo'))
   : null
 
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+  ? JSON.parse(localStorage.getItem('shippingAddress'))
+  : {}
+
+// Push data from local storage into Redux initial state
 const initialState = {
-  cart: { cartItems: cartItemsFromStorage },
+  cart: {
+    cartItems: cartItemsFromStorage,
+    shippingAddress: shippingAddressFromStorage,
+  },
   userLogin: { userInfo: userInfoFromStorage },
 }
 
