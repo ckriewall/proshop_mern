@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Row, Col, ListGroup, Card } from 'react-bootstrap'
+import { Row, Col, ListGroup } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import CheckoutSteps from '../components/CheckoutSteps'
+import OrderSummary from '../components/OrderSummary'
 import Message from '../components/Message'
 
 const PlaceOrderScreen = () => {
@@ -24,10 +25,6 @@ const PlaceOrderScreen = () => {
     Number(cart.taxPrice)
   ).toFixed(2)
 
-  const placeOrderHandler = () => {
-    console.log('Place Order')
-  }
-
   return (
     <div>
       <CheckoutSteps step1 step2 step3 />
@@ -35,6 +32,7 @@ const PlaceOrderScreen = () => {
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
+              <h1>Place Order</h1>
               <h2>Shipping</h2>
               <p>
                 {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
@@ -48,7 +46,7 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Order Summary</h2>
+              <h2>Items</h2>
               {cart.cartItems.length === 0 ? (
                 <Message>Your cart is empty.</Message>
               ) : (
@@ -72,49 +70,8 @@ const PlaceOrderScreen = () => {
             </ListGroup.Item>
           </ListGroup>
         </Col>
-        <Col md={4}>
-          <Card>
-            <ListGroup variant='flush'>
-              <ListGroup.Item>
-                <h2>Order Summary</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Items</Col>
-                  <Col className='text-right'>${cart.itemsPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col className='text-right'>${cart.shippingPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax @ 15%</Col>
-                  <Col className='text-right'>${cart.taxPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Total</Col>
-                  <Col className='text-right'>${cart.totalPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  disabled={cart.cartItems === 0}
-                  onClick={placeOrderHandler}
-                >
-                  Place Order
-                </Button>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Col>
+
+        <OrderSummary />
       </Row>
     </div>
   )
