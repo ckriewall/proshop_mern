@@ -20,7 +20,7 @@ const PlaceOrderScreen = ({ history }) => {
 
   cart.shippingPrice =
     cart.itemsPrice > 100 ? Number(0).toFixed(2) : Number(100).toFixed(2)
-  cart.taxPrice = (0.15 * cart.itemsPrice).toFixed(2)
+  cart.taxPrice = Number((0.15 * cart.itemsPrice).toFixed(2))
   cart.totalPrice = (
     Number(cart.itemsPrice) +
     Number(cart.shippingPrice) +
