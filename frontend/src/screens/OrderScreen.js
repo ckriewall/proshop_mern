@@ -11,10 +11,6 @@ const OrderScreen = ({ match }) => {
 
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getOrderDetails(orderId))
-  }, [dispatch, orderId])
-
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
 
@@ -24,6 +20,12 @@ const OrderScreen = ({ match }) => {
       0
     )
   }
+
+  useEffect(() => {
+    if (!order || order._id !== orderId) {
+      dispatch(getOrderDetails(orderId))
+    }
+  }, [order, orderId])
 
   return loading ? (
     <Loader />
@@ -38,12 +40,13 @@ const OrderScreen = ({ match }) => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
-                {order.shippingAddress.postalCode} {order.country}
-              </p>
-              <p>
-                Name: {order.user.name} <br />
-                Email:{' '}
+                {order.user.name} <br />
+                {order.shippingAddress.address}
+                <br />
+                {order.shippingAddress.city}, {order.shippingAddress.postalCode}
+                <br />
+                {order.shippingAddress.country}
+                <br />
                 <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               </p>
             </ListGroup.Item>
