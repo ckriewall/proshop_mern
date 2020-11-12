@@ -13,6 +13,7 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userUpdateProfileReducer,
+  userUpdateReducer,
 } from './reducers/userReducers'
 import {
   orderCreateReducer,
@@ -23,19 +24,20 @@ import {
 
 // Create a single reducer to define Redux Sore data
 const reducer = combineReducers({
-  productList: productListReducer,
-  productDetails: productDetailsReducer,
   cart: cartReducer,
-  userLogin: userLoginReducer,
-  userRegister: userRegisterReducer,
+  orderCreate: orderCreateReducer,
+  orderDetails: orderDetailsReducer,
+  orderListMy: orderListMyReducer,
+  orderPay: orderPayReducer,
+  productDetails: productDetailsReducer,
+  productList: productListReducer,
   userDelete: userDeleteReducer,
   userDetails: userDetailsReducer,
   userList: userListReducer,
+  userLogin: userLoginReducer,
+  userRegister: userRegisterReducer,
+  userUpdate: userUpdateReducer,
   userUpdateProfile: userUpdateProfileReducer,
-  orderCreate: orderCreateReducer,
-  orderDetails: orderDetailsReducer,
-  orderPay: orderPayReducer,
-  orderListMy: orderListMyReducer,
 })
 
 // Get data from local storage to push into Redux initial state.
