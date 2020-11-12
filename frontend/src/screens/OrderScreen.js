@@ -70,7 +70,7 @@ const OrderScreen = ({ match, history }) => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, orderId, successPay, order])
+  }, [dispatch, orderId, successPay, order, history])
 
   const successPaymentHandler = (paymentResult) => {
     // Runs after the onSuccess event included with the PayPal button package.
