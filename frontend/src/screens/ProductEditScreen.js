@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import { listProductDetails } from '../actions/productActions'
+import { listProductDetails, updateProduct } from '../actions/productActions'
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
@@ -23,38 +24,43 @@ const ProductEditScreen = ({ match, history }) => {
   const productDetails = useSelector((state) => state.productDetails)
   const { loading, error, product } = productDetails
 
-  //   const userUpdate = useSelector((state) => state.userUpdate)
-  //   const { loadingUpdate, errorUpdate, success: successUpdate } = userUpdate
+  const productUpdate = useSelector((state) => state.productUpdate)
+  const { loadingUpdate, errorUpdate, success: successUpdate } = productUpdate
 
   useEffect(() => {
-    if (!product.name || product._id !== productId) {
-      dispatch(listProductDetails(productId))
+    if (successUpdate) {
+      dispatch({ type: PRODUCT_UPDATE_RESET })
+      history.push('/admin/products')
     } else {
-      setBrand(product.brand)
-      setCategory(product.category)
-      setCountInStock(product.countInStock)
-      setDescription(product.description)
-      setImage(product.image)
-      setName(product.name)
-      setPrice(product.price)
+      if (!product.name || product._id !== productId) {
+        dispatch(listProductDetails(productId))
+      } else {
+        setBrand(product.brand)
+        setCategory(product.category)
+        setCountInStock(product.countInStock)
+        setDescription(product.description)
+        setImage(product.image)
+        setName(product.name)
+        setPrice(product.price)
+      }
     }
-  }, [dispatch, productId, product, history])
+  }, [dispatch, productId, product, history, successUpdate])
 
   const submitHandler = (e) => {
     e.preventDefault()
     // On save, dispatch the updateProduct action passing in the form data
-    // dispatch(
-    //   updateProduct({
-    //     _id: productId,
-    //     brand,
-    //     category,
-    //     description,
-    //     countInStoc,
-    //     image,
-    //     name,
-    //     price,
-    //   })
-    // )
+    dispatch(
+      updateProduct({
+        _id: productId,
+        brand,
+        category,
+        countInStock,
+        description,
+        image,
+        name,
+        price,
+      })
+    )
   }
 
   return (
@@ -65,8 +71,8 @@ const ProductEditScreen = ({ match, history }) => {
 
       <FormContainer>
         <h1>Edit Product</h1>
-        {/* {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>} */}
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
