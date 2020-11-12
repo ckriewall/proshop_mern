@@ -136,7 +136,6 @@ const getUserById = asyncHandler(async (req, res) => {
 // @access  Private/Admin only
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id)
-  console.log(`Found user ${user.name}. Attempting to delete...`)
   if (user) {
     user.remove()
     res.json({ message: 'User removed' })
