@@ -1,3 +1,9 @@
+/*
+    Controller functions get requested data from a model.
+    https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
+    API data flow: routes -> controllers -> models -> database
+*/
+
 import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'

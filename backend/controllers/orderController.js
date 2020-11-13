@@ -1,3 +1,9 @@
+/*
+    Controller functions get requested data from a model.
+    https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
+    API data flow: routes -> controllers -> models -> database
+*/
+
 import asyncHandler from 'express-async-handler'
 import Order from '../models/orderModel.js'
 
@@ -94,4 +100,18 @@ const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders)
 })
 
-export { addOrderItems, getOrderById, getMyOrders, updateOrderToPaid }
+// @desc    Get all orders
+// @route   GET /api/orders
+// @access  Private/Admin
+const getOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate('user', 'id name')
+  res.json(orders)
+})
+
+export {
+  addOrderItems,
+  getOrderById,
+  updateOrderToPaid,
+  getMyOrders,
+  getOrders,
+}

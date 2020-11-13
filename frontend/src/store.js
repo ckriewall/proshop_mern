@@ -21,15 +21,17 @@ import {
 import {
   orderCreateReducer,
   orderDetailsReducer,
+  orderListReducer,
   orderListMyReducer,
   orderPayReducer,
 } from './reducers/orderReducers'
 
-// Create a single reducer to define Redux Sore data
+// Create a single reducer to define Redux Store data
 const reducer = combineReducers({
   cart: cartReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
+  orderList: orderListReducer,
   orderListMy: orderListMyReducer,
   orderPay: orderPayReducer,
   productCreate: productCreateReducer,
