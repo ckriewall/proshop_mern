@@ -49,7 +49,10 @@ const Header = () => {
 
               {/* Admin Menu */}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin' id='adminmenu'>
+                <NavDropdown
+                  title={<span className='text-warning'>Admin</span>}
+                  id='adminmenu'
+                >
                   <LinkContainer to='/admin/orders'>
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>

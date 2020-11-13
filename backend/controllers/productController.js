@@ -1,5 +1,5 @@
 /*
-    Controller functions get requested data from a model.
+    Controller functions interact with data through the model.
     https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
     API data flow: routes -> controllers -> models -> database
 */

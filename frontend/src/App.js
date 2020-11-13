@@ -26,20 +26,20 @@ const App = () => {
       <Header />
       <main className='py-3'>
         <Container>
+          <Route path='/cart/:id?' component={CartScreen} />
           <Route path='/login' component={LoginScreen} />
-          <Route path='/register' component={RegisterScreen} />
           <Route path='/order/:id' component={OrderScreen} />
           <Route path='/payment' component={PaymentScreen} />
           <Route path='/placeorder' component={PlaceOrderScreen} />
-          <Route path='/profile' component={ProfileScreen} />
           <Route path='/product/:id' component={ProductScreen} />
+          <Route path='/profile' component={ProfileScreen} />
+          <Route path='/register' component={RegisterScreen} />
           <Route path='/shipping' component={ShippingScreen} />
-          <Route path='/cart/:id?' component={CartScreen} />
-          <Route path='/admin/users' component={UserListScreen} />
           <Route path='/admin/orders' component={OrderListScreen} />
+          <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
           <Route path='/admin/products' component={ProductListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
-          <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
+          <Route path='/admin/users' component={UserListScreen} />
           <Route path='/' component={HomeScreen} exact />
         </Container>
       </main>

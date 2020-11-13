@@ -1,5 +1,5 @@
 /*
-    Controller functions get requested data from a model.
+    Controller functions interact with data through the model.
     https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
     API data flow: routes -> controllers -> models -> database
 */
@@ -92,6 +92,29 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    Update order to delivered
+// @route   GET /api/orders/:id/deliver
+// @access  Private/Admin
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  // retrieve original order details
+  const order = await Order.findById(req.params.id)
+
+  // Append delivery details to original order object
+  if (order) {
+    order.isDelivered = true
+    order.deliveredAt = Date.now()
+
+    // Save the modified order object to Mongo.
+    const updatedOrder = await order.save()
+
+    // Return the updated order, including delivery details, to the browser.
+    res.json(updatedOrder)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+})
+
 // @desc    Get orders for logged in user
 // @route   GET /api/orders/myorders
 // @access  Private
@@ -111,6 +134,7 @@ const getOrders = asyncHandler(async (req, res) => {
 export {
   addOrderItems,
   getOrderById,
+  updateOrderToDelivered,
   updateOrderToPaid,
   getMyOrders,
   getOrders,

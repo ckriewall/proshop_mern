@@ -3,6 +3,9 @@ import {
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
   ORDER_CREATE_FAIL,
+  ORDER_DELIVER_REQUEST,
+  ORDER_DELIVER_SUCCESS,
+  ORDER_DELIVER_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
@@ -80,6 +83,53 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
+    })
+  }
+}
+
+export const deliverOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      // Initiate deliver request action, loading will be set to true
+      type: ORDER_DELIVER_REQUEST,
+    })
+
+    // Get information about the current user from Redux state
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    // Configure the axios request to authenticate and send JSON
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    // Send a PUT request to Express endpoint
+    const { data } = await axios.put(
+      `/api/orders/${order._id}/deliver`,
+      {},
+      config
+    )
+
+    // No errors yet, so set loading: false and success: true
+    dispatch({
+      type: ORDER_DELIVER_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+    }
+    dispatch({
+      // There was a problem marking the order 'delivered'.
+      // Return the error message.
+      type: ORDER_DELIVER_FAIL,
+      payload: message,
     })
   }
 }
