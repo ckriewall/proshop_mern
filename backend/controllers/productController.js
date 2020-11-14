@@ -12,7 +12,7 @@ import Product from '../models/productModel.js'
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
   /*
-    Check for keyword in the querystring
+    Check for keywords in the querystring.
     If there is a keyword pass it to the find().
     If keyword is empty, pass an empty string {}.
 
@@ -30,12 +30,28 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {}
 
-  const products = await Product.find({ ...keyword }).sort({
-    brand: 1,
-    name: 1,
-  })
+  // Count products matching the search terms
+  const count = await Product.countDocuments({ ...keyword })
 
-  res.json(products)
+  // Set paging variables
+  const pageSize = 4
+  const page = Number(req.query.page) || 1
+
+  /*
+    Perform the product search. Limit the # of documents to the page size.
+    Skip to nth product. Example: PageSize=10, CurrentPage=4
+    n = 10*(4-1) = 30. We want Mongo to return products 30-39
+  */
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .sort({
+      brand: 1,
+      name: 1,
+    })
+
+  // Return products, current page, and total pages (rounded to the next highest integer)
+  res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
 // @desc    Fetch single product
