@@ -11,7 +11,29 @@ import Product from '../models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ brand: 1, name: 1 })
+  /*
+    Check for keyword in the querystring
+    If there is a keyword pass it to the find().
+    If keyword is empty, pass an empty string {}.
+
+    https://docs.mongodb.com/manual/reference/operator/query/regex/
+    $regex is a mongo operator used to support partial word searches.
+    The 'i' option indicates case insensitivity.
+  */
+
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {}
+
+  const products = await Product.find({ ...keyword }).sort({
+    brand: 1,
+    name: 1,
+  })
 
   res.json(products)
 })
