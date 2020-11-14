@@ -34,7 +34,7 @@ const getProducts = asyncHandler(async (req, res) => {
   const count = await Product.countDocuments({ ...keyword })
 
   // Set paging variables
-  const pageSize = 4
+  const pageSize = 10
   const page = Number(req.query.page) || 1
 
   /*
