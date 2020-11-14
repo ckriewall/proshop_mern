@@ -1,15 +1,17 @@
 /*
   The search box doesn't execute a search. Rather,
   it redirects the browser to the HomeScreen Component. 
-  In HomeScreen the default product list  is filtered 
+  In HomeScreen the default product list is filtered 
   based on keywords pulled from the querystring.
 */
-
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
-const SearchBox = ({ history }) => {
+const SearchBox = () => {
   const [keyword, setKeyword] = useState('')
+
+  const history = useHistory()
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -27,11 +29,12 @@ const SearchBox = ({ history }) => {
         type='text'
         name='q'
         onChange={(e) => setKeyword(e.target.value)}
-        placeholder='Search Products...'
+        placeholder='Search Products'
         className='mr-sm-2 ml-sm-5'
       ></Form.Control>
-      <Button type='submit' variant='outline-secondary' className='py-2 px-3'>
-        <i className='fa fa-search' />
+
+      <Button type='submit' variant='outline-success' className='p-2'>
+        Search
       </Button>
     </Form>
   )

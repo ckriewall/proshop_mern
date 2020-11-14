@@ -13,14 +13,13 @@ import Product from '../models/productModel.js'
 const getProducts = asyncHandler(async (req, res) => {
   /*
     Check for keywords in the querystring.
-    If there is a keyword pass it to the find().
+    If there is a keyword, pass it to the find().
     If keyword is empty, pass an empty string {}.
 
     https://docs.mongodb.com/manual/reference/operator/query/regex/
     $regex is a mongo operator used to support partial word searches.
     The 'i' option indicates case insensitivity.
   */
-
   const keyword = req.query.keyword
     ? {
         name: {
