@@ -36,14 +36,18 @@ const OrderScreen = ({ match, history }) => {
 
   if (!loading) {
     // if order details are finished loading, crunch some numbers
-    const addDecimals = (num) => {
-      return (Math.round(num * 100) / 100).toFixed(2)
-    }
 
-    order.itemsPrice = addDecimals(
-      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    order.itemsPrice = order.orderItems.reduce(
+      (acc, item) => acc + item.price * item.qty,
+      0
     )
   }
+
+  const currency = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  })
 
   useEffect(() => {
     // if there is no userInfo in state, force the user to login
@@ -100,7 +104,8 @@ const OrderScreen = ({ match, history }) => {
     <Message variant='danger'>{error}</Message>
   ) : (
     <>
-      <h1>Order {order._id}</h1>
+      <h1>Order</h1>
+      <p># {order._id}</p>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
@@ -161,7 +166,8 @@ const OrderScreen = ({ match, history }) => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x ${item.price} ={' '}
+                          {currency.format(item.qty * item.price)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -180,25 +186,25 @@ const OrderScreen = ({ match, history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
+                  <Col>{currency.format(order.itemsPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
+                  <Col>{currency.format(order.shippingPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
+                  <Col>{currency.format(order.taxPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
+                  <Col>{currency.format(order.totalPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               {!order.isPaid && (
