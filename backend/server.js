@@ -24,11 +24,6 @@ if (process.env.NODE_ENV === 'development') {
 // express.json middleware - allow express to pull json from req.body
 app.use(express.json())
 
-// confirm express is online if GET is sent to root
-app.get('/', (req, res) => {
-  res.send('API is running....')
-})
-
 // pass routing to route handlers
 app.use('/api/orders', orderRoutes)
 app.use('/api/products', productRoutes)
@@ -44,6 +39,16 @@ app.get('/api/config/paypal', (req, res) =>
 // this path holds images uploaded by Admin
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+  app.get('*')
+} else {
+  // confirm express is online if GET is sent to root
+  app.get('/', (req, res) => {
+    res.send('API is running....')
+  })
+}
 
 // middleware to handle 404s and errors
 app.use(notFound)
