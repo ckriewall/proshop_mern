@@ -1,31 +1,13 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, ListGroup, Card, Button } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
+import { Row, Col, ListGroup } from 'react-bootstrap'
 import CheckoutSteps from '../components/CheckoutSteps'
+import OrderSummary from '../components/OrderSummary'
 import Message from '../components/Message'
-import { createOrder } from '../actions/orderActions'
 
 const PlaceOrderScreen = ({ history }) => {
-  const dispatch = useDispatch()
-
   const cart = useSelector((state) => state.cart)
-
-  // Calculate Prices
-
-  cart.itemsPrice = cart.cartItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  )
-
-  cart.shippingPrice =
-    cart.itemsPrice > 100 ? Number(0).toFixed(2) : Number(100).toFixed(2)
-  cart.taxPrice = Number((0.15 * cart.itemsPrice).toFixed(2))
-  cart.totalPrice = (
-    Number(cart.itemsPrice) +
-    Number(cart.shippingPrice) +
-    Number(cart.taxPrice)
-  ).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
   const { order, success, error } = orderCreate
@@ -37,23 +19,10 @@ const PlaceOrderScreen = ({ history }) => {
     // eslint-disable-next-line
   }, [history, success])
 
-  const placeOrderHandler = () => {
-    dispatch(
-      createOrder({
-        orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
-        taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice,
-      })
-    )
-  }
-
   return (
     <div>
       <CheckoutSteps step1 step2 step3 />
+      {error && <Message variant='warning'>{error}</Message>}
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
@@ -97,54 +66,7 @@ const PlaceOrderScreen = ({ history }) => {
           </ListGroup>
         </Col>
 
-        <Col md={4}>
-          <Card className='mt-3'>
-            <ListGroup variant='flush'>
-              <ListGroup.Item>
-                <h2>Order Summary</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Items</Col>
-                  <Col className='text-right'>${cart.itemsPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col className='text-right'>${cart.shippingPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax @ 15%</Col>
-                  <Col className='text-right'>${cart.taxPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Total</Col>
-                  <Col className='text-right'>${cart.totalPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              {error && (
-                <ListGroup.Item>
-                  <Message variant='danger'>{error}</Message>
-                </ListGroup.Item>
-              )}
-              <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  disabled={cart.cartItems === 0}
-                  onClick={placeOrderHandler}
-                >
-                  Place Order
-                </Button>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Col>
+        <OrderSummary />
       </Row>
     </div>
   )

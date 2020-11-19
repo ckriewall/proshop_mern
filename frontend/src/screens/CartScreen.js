@@ -29,13 +29,26 @@ const CartScreen = ({ match, location, history }) => {
     history.push('/login?redirect=shipping')
   }
 
+  const subtotal = (cartItems) => {
+    return currency.format(
+      cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)
+    )
+  }
+
+  const currency = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  })
+
   return (
     <Row>
       <Col md={8}>
         <h1>Shopping Cart</h1>
         {cartItems.length === 0 ? (
           <Message>
-            Your cart is empty <Link to='/'>Go Back</Link>
+            Your cart is empty.
+            <Link to='/'>Go Back</Link>
           </Message>
         ) : (
           <ListGroup variant='flush'>
@@ -85,14 +98,9 @@ const CartScreen = ({ match, location, history }) => {
         <Card>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
-              </h2>
-              $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
+              <h2>Subtotal {subtotal(cartItems)}</h2>
+              {cartItems.reduce((acc, item) => acc + item.qty, 0)} item(s)
+              <br />
             </ListGroup.Item>
             <ListGroup.Item>
               <Button
